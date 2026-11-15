@@ -1,0 +1,6 @@
+5 7
+RRRRRRR
+RS....R
+R.RRR.R
+R.RRM.R
+RRRRRRR

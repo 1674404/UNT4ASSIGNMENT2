@@ -201,36 +201,46 @@ public class CaveExplorer {
             System.out.println("No path to the mirror pool.");
         }
 		// Step 5/6: Repeat for a different CaveExplorer object read from a file
+        String[] fileNames = {
+            "testdat.txt",
+            "testdat2.txt",
+            "testdat3.txt",
+        };
 		// Uncomment code below to start testing your 1-parameter constructor
 
 		
-		String fileName = "testdat.txt"; 
-		try { 
-			CaveExplorer cE2 = new CaveExplorer(fileName); 
-			System.out.println("Cave 2 starting layout: ");
-			System.out.print(cE2);
+		for (int i = 0; i < fileNames.length; i++) {
+            String fileName = fileNames[i];
+            int caveNumber = i + 2;
 
-			boolean solved2 = cE2.solve();
+            try {
+                CaveExplorer cE2 = new CaveExplorer(fileName);
 
-			System.out.println("Cave 2 final layout:");
-            System.out.print(cE2);
-            System.out.println("Path exists: " + solved2);
+                System.out.println("Cave " + caveNumber + " starting layout:");
+                System.out.print(cE2);
 
-            if (solved2) {
-                System.out.println("Path: " + cE2.getPath());
+                boolean solved2 = cE2.solve();
+
+                System.out.println("Cave " + caveNumber + " final layout:");
+                System.out.print(cE2);
+                System.out.println("Path exists: " + solved2);
+
+                if (solved2) {
+                    System.out.println("Path: " + cE2.getPath());
+                }
+                else {
+                    System.out.println("No path to the mirror pool.");
+                }
             }
-            else {
-                System.out.println("No path to the mirror pool.");
+            catch (FileNotFoundException e) {
+                System.out.println("Can't find file " + fileName);
             }
-		} 
-		catch (FileNotFoundException e ) {
-			System.out.println("Can't find file " + fileName); 
-		}
-		catch (Exception e) {
-			System.out.println("Other error: " + e.getMessage());
-		}
-		
-		System.out.println("Finished CaveExplorer");
+            catch (Exception e) {
+                System.out.println("Other error: " + e.getMessage());
+            }
+        }
+
+        System.out.println("Finished CaveExplorer");
 	}
 
 }
