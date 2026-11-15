@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+import java.util.Stack;
 
 public class CaveExplorer {
 	private char[][] cave;
@@ -44,8 +45,12 @@ public class CaveExplorer {
 
         explored = true;
         path = "";
+        found = false;
 
         boolean[][] visited = new boolean[cave.length][cave[0].length];
+        Stack<Integer> rowStack = new Stack<Integer>();
+        Stack<Integer> colStack = new Stack<Integer>(); 
+        
         int currentRow = -1;
         int currentCol = -1;
 
@@ -63,8 +68,10 @@ public class CaveExplorer {
         }
 
         visited[currentRow][currentCol] = true;
+        rowStack.push(currentRow);
+        colStack.push(currentCol);
 
-        while (!found) {
+        while (!rowStack.empty()) {
             int nextRow = currentRow;
             int nextCol = currentCol;
             char direction = ' ';
@@ -97,23 +104,44 @@ public class CaveExplorer {
                 nextCol = currentCol - 1;
                 direction = 'w';
             }
-            else {
-                path = "";
-                return false;
+
+            if (direction != ' ') {
+                found = cave[nextRow][nextCol] == 'M';
+
+                cave[currentRow][currentCol] = '.';
+                currentRow = nextRow;
+                currentCol = nextCol;
+                cave[currentRow][currentCol] = 'S';
+
+                visited[currentRow][currentCol] = true;
+                rowStack.push(currentRow);
+                colStack.push(currentCol);
+                path += direction;
+
+                if (found) {
+                    return true;
+                }
             }
+            else {
+                rowStack.pop();
+                colStack.pop();
 
-            found = cave[nextRow][nextCol] == 'M';
+                if (rowStack.empty()) {
+                    path = "";
+                    return false;
+                }
 
-            cave[currentRow][currentCol] = '.';
-            currentRow = nextRow;
-            currentCol = nextCol;
-            cave[currentRow][currentCol] = 'S';
+                cave[currentRow][currentCol] = '.';
+                currentRow = rowStack.peek();
+                currentCol = colStack.peek();
+                cave[currentRow][currentCol] = 'S';
 
-            visited[currentRow][currentCol] = true;
-            path += direction;
+                path = path.substring(0, path.length() - 1);
+            }
         }
 
-        return true;
+        path = "";
+        return false;
     }
 	// Step 4: getPath method
 	public String getPath() {
